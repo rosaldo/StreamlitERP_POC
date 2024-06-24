@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import streamlit as st
 
+version_global = "1.3.0"
 version = "1.0.0"
 ASSETS_PATH = "assets"
 
