@@ -26,11 +26,12 @@ class Suppliers(Base):
         return f"Suppliers(id={self.id}, name={self.name}, email={self.email}, address={self.address}, phone={self.phone}, created_at={self.created_at}, updated_at={self.updated_at})"
 
 class Products(Base):
-    version = "1.0.0"
+    version = "1.1.0"
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    bar_code = Column(String)
     description = Column(String)
     supplier = Column(String)
     stock = Column(Double)
@@ -41,7 +42,7 @@ class Products(Base):
     updated_at = Column(DateTime)
 
     def __repr__(self):
-        return f"Products(id={self.id}, name={self.name}, description={self.description}, supplier={self.supplier}, stock={self.stock}, unit={self.unit}, price={self.price}, created_at={self.created_at}, updated_at={self.updated_at})"
+        return f"Products(id={self.id}, name={self.name}, bar_code={self.bar_code}, description={self.description}, supplier={self.supplier}, stock={self.stock}, unit={self.unit}, price={self.price}, created_at={self.created_at}, updated_at={self.updated_at})"
 
 class Costumers(Base):
     version = "1.0.0"
