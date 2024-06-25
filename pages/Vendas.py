@@ -13,4 +13,4 @@ with open(os.path.join(ASSETS_PATH, "styles.css")) as css_file:
 
 st.logo(image="assets/logo.png", link="https://github.com/rosaldo")
 
-st.write("# Sales")
+st.write("# Vendas")
