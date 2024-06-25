@@ -3,7 +3,6 @@ import os
 import pandas as pd
 import streamlit as st
 
-version_global = "1.6.0"
 version = "1.0.0"
 ASSETS_PATH = "assets"
 
@@ -14,4 +13,4 @@ with open(os.path.join(ASSETS_PATH, "styles.css")) as css_file:
 
 st.logo(image="assets/logo.png", link="https://github.com/rosaldo")
 
-st.write("# Home")
+st.write("# Fornecedores")

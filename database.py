@@ -20,7 +20,7 @@ class Suppliers(Base):
     phone = Column(String)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=dtt.now())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, default=dtt.now())
 
     def __repr__(self):
         return f"Suppliers(id={self.id}, name={self.name}, email={self.email}, address={self.address}, phone={self.phone}, created_at={self.created_at}, updated_at={self.updated_at})"
@@ -39,7 +39,7 @@ class Products(Base):
     price = Column(Double)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=dtt.now())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, default=dtt.now())
 
     def __repr__(self):
         return f"Products(id={self.id}, name={self.name}, bar_code={self.bar_code}, description={self.description}, supplier={self.supplier}, stock={self.stock}, unit={self.unit}, price={self.price}, created_at={self.created_at}, updated_at={self.updated_at})"
@@ -55,7 +55,7 @@ class Costumers(Base):
     phone = Column(String)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=dtt.now())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, default=dtt.now())
 
     def __repr__(self):
         return f"Costumers(id={self.id}, name={self.name}, email={self.email}, address={self.address}, phone={self.phone}, created_at={self.created_at}, updated_at={self.updated_at})"
@@ -69,7 +69,7 @@ class Sales(Base):
     price = Column(Double)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=dtt.now())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, default=dtt.now())
 
     def __repr__(self):
         return f"Sales(id={self.id}, costumer={self.costumer}, price={self.price}, created_at={self.created_at}, updated_at={self.updated_at})"
@@ -84,7 +84,7 @@ class ProductsSales(Base):
     quantity = Column(Integer)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=dtt.now())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, default=dtt.now())
 
     def __repr__(self):
         return f"ProductsSales(id={self.id}, sale={self.sale}, product={self.product}, quantity={self.quantity}, created_at={self.created_at}, updated_at={self.updated_at})"
