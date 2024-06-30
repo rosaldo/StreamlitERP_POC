@@ -26,23 +26,24 @@ class Suppliers(Base):
         return f"Suppliers(id={self.id}, name={self.name}, email={self.email}, address={self.address}, phone={self.phone}, created_at={self.created_at}, updated_at={self.updated_at})"
 
 class Products(Base):
-    version = "1.1.0"
+    version = "1.3.0"
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
     bar_code = Column(String)
     description = Column(String)
-    supplier = Column(String)
+    supplier_id = Column(Integer, ForeignKey("suppliers.id"))
     stock = Column(Double)
     unit = Column(String)
     price = Column(Double)
+    margin = Column(Double)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=dtt.now())
     updated_at = Column(DateTime, default=dtt.now())
 
     def __repr__(self):
-        return f"Products(id={self.id}, name={self.name}, bar_code={self.bar_code}, description={self.description}, supplier={self.supplier}, stock={self.stock}, unit={self.unit}, price={self.price}, created_at={self.created_at}, updated_at={self.updated_at})"
+        return f"Products(id={self.id}, name={self.name}, bar_code={self.bar_code}, description={self.description}, supplier={self.supplier_id}, stock={self.stock}, unit={self.unit}, price={self.price}, margin={self.margin}, active={self.price}, created_at={self.created_at}, updated_at={self.updated_at})"
 
 class Costumers(Base):
     version = "1.0.0"

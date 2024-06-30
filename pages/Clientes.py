@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "3.0.0"
+version = "3.0.1"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Home", layout="wide")
@@ -96,7 +96,5 @@ grid_response = AgGrid(
 if grid_response["event_data"]:
     new_data = pd.DataFrame(grid_response["data"])
     row_id = grid_response["event_data"].get("rowIndex")
-    if row_id:
-        row_id = int(row_id)
-        new_row = new_data.iloc[row_id]
-        save_data(new_row)
+    new_row = new_data.iloc[row_id]
+    save_data(new_row)

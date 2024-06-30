@@ -1,14 +1,13 @@
+#!/usr/bin/env python3
+# coding: utf-8
+
 import os
 
 import pandas as pd
 import streamlit as st
 
-<<<<<<< HEAD
-version_global = "1.8.0"
-=======
-version_global = "1.7.0"
->>>>>>> 4d7587dfb47fa1aa10f4f2b8e4a7c9c54e5697eb
-version = "1.0.0"
+version_global = "1.12.0"
+version = "1.1.0"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Home")
