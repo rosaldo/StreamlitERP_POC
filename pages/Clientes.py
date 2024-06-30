@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "3.0.1"
+version = "3.1.0"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Home", layout="wide")
@@ -25,13 +25,13 @@ def load_data():
     costumers = dbase.session.query(dbase.costumers).all()
     return pd.DataFrame([{
         "id": costumer.id,
-        "Nome": costumer.name,
-        "Email": costumer.email,
-        "Endereco": costumer.address,
-        "Celular": costumer.phone,
-        "Ativo": costumer.active,
-        "Criado_em": costumer.created_at,
-        "Atualizado_em": costumer.updated_at
+        "name": costumer.name,
+        "email": costumer.email,
+        "address": costumer.address,
+        "phone": costumer.phone,
+        "active": costumer.active,
+        "created_at": costumer.created_at,
+        "updated_at": costumer.updated_at
     } for costumer in costumers])
 
 df_costumers = load_data()
@@ -39,22 +39,22 @@ df_costumers = load_data()
 def save_data(row):
     costumer = dbase.session.query(dbase.costumers).filter(dbase.costumers.id == int(row.id)).first()
     if costumer:
-        costumer.name = row.Nome
-        costumer.email = row.Email
-        costumer.address = row.Endereco
-        costumer.phone = row.Celular
-        costumer.active = bool(row.Ativo)
+        costumer.name = row.name
+        costumer.email = row.email
+        costumer.address = row.address
+        costumer.phone = row.phone
+        costumer.active = bool(row.active)
         costumer.updated_at = dtt.now()
         dbase.session.commit()
         st.rerun()
 
 with st.form("add_costumer", clear_on_submit=True):
     name, email, address, phone, add_button = st.columns(5)
-    name_input = name.text_input("Nome", key="Nome", placeholder="Nome", label_visibility="hidden")
-    email_input = email.text_input("Email", key="Email", placeholder="Email", label_visibility="hidden")
-    address_input = address.text_input("Endereco", key="Endereco", placeholder="Endereco", label_visibility="hidden")
-    phone_input = phone.text_input("Celular", key="Celular", placeholder="Celular", label_visibility="hidden")
-    add_button.markdown("<div style='padding-top: 27px'>", unsafe_allow_html=True)
+    name_input = name.text_input("Nome", key="name")
+    email_input = email.text_input("E-mail", key="email")
+    address_input = address.text_input("Endereço", key="address")
+    phone_input = phone.text_input("Celular", key="phone")
+    add_button.markdown("<div style='padding-top: 28px'>", unsafe_allow_html=True)
     add_costumer = add_button.form_submit_button("Adicionar Cliente", use_container_width=True)
     add_button.markdown("</div>", unsafe_allow_html=True)
 
@@ -70,8 +70,13 @@ if add_costumer and name_input and email_input and address_input and phone_input
     
 gb = GridOptionsBuilder.from_dataframe(df_costumers[[col for col in df_costumers.columns if col.lower() != "id"]])
 gb.configure_default_column(editable=True, filter=True, groupable=True)
-gb.configure_column("Criado_em", editable=False, cellStyle={"textAlign": "center"}, sorted=True, sort="desc")
-gb.configure_column("Atualizado_em", editable=False, cellStyle={"textAlign": "center"})
+gb.configure_column("name", "Nome")
+gb.configure_column("email", "E-mail")
+gb.configure_column("address", "Endereço")
+gb.configure_column("phone", "Celular", cellStyle={"textAlign": "center"})
+gb.configure_column("active", "Ativo", cellStyle={"textAlign": "center"})
+gb.configure_column("created_at", "Criado em", editable=False, cellStyle={"textAlign": "center"}, sorted=True, sort="desc")
+gb.configure_column("updated_at", "Atualizado em", editable=False, cellStyle={"textAlign": "center"})
 gb.configure_pagination()
 gb.configure_grid_options(
     localeText=locale_text,
