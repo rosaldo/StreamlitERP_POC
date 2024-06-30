@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "2.1.0"
+version = "2.1.1"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Produtos", layout="wide")
@@ -43,7 +43,7 @@ df_products = load_data()
 def save_data(row):
     product = dbase.session.query(dbase.products).filter(dbase.products.id == int(row.id)).first()
     if product:
-        product.name = row.name
+        product.name = row.to_dict()["name"]
         product.bar_code = row.bar_code
         product.description = row.description
         product.supplier_id = row.supplier_id
@@ -59,7 +59,7 @@ def save_data(row):
 with st.form("add_product", clear_on_submit=True):
     name, bar_code, description, supplier, stock, unit, price, margin, add_button = st.columns(9)
     name_input = name.text_input("Nome", key="name")
-    bar_code_input = bar_code.number_input("Codigo de barras", key="bar_code", format="%f")
+    bar_code_input = bar_code.text_input("Codigo de barras", key="bar_code")
     description_input = description.text_input("Descrição", key="description")
     supplier_input = supplier.selectbox("Fornecedor", dbase.session.query(dbase.suppliers).all(), key="supplier_id")
     stock_input = stock.number_input("Em estoque", key="stock")
@@ -86,12 +86,12 @@ if add_product and name_input and bar_code_input and description_input and stock
 
 gb = GridOptionsBuilder.from_dataframe(df_products[[col for col in df_products.columns if col.lower() != "id"]])
 gb.configure_default_column(editable=True, filter=True, groupable=True)
-gb.configure_column("name", "Nome", cellDataType="text")
-gb.configure_column("bar_code", "Código de barras", cellDataType="number")
-gb.configure_column("description", "Descrição", cellDataType="text")
+gb.configure_column("name", "Nome")
+gb.configure_column("bar_code", "Código de barras")
+gb.configure_column("description", "Descrição")
 gb.configure_column("supplier_id", "Fornecedor", cellDataType="number")
 gb.configure_column("stock", "Em estoque", cellDataType="number")
-gb.configure_column("unit", "Unidade", cellDataType="text")
+gb.configure_column("unit", "Unidade")
 gb.configure_column("price", "Preço", cellDataType="number")
 gb.configure_column("margin", "Margem", cellDataType="number")
 gb.configure_column("active", "Ativo", cellStyle={"textAlign": "center"})

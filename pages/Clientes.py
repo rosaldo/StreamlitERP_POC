@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "3.1.0"
+version = "3.1.1"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Home", layout="wide")
@@ -39,7 +39,7 @@ df_costumers = load_data()
 def save_data(row):
     costumer = dbase.session.query(dbase.costumers).filter(dbase.costumers.id == int(row.id)).first()
     if costumer:
-        costumer.name = row.name
+        costumer.name = row.to_dict()["name"]
         costumer.email = row.email
         costumer.address = row.address
         costumer.phone = row.phone
