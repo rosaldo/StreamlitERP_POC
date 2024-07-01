@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "2.1.1"
+version = "2.3.0"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Produtos", layout="wide")
@@ -21,6 +21,12 @@ st.logo(image="assets/logo.png", link="https://github.com/rosaldo")
 
 st.write("# Produtos")
 
+all_suppliers = dbase.session.query(dbase.suppliers).all()
+supplier_names = [supplier.name for supplier in all_suppliers]
+supplier_names.insert(0, "Fornecedores")
+supplier_dict = {supplier.name: supplier.id for supplier in all_suppliers}
+supplier_dict_inv = {supplier.id: supplier.name for supplier in all_suppliers}
+
 def load_data():
     products = dbase.session.query(dbase.products).all()
     return pd.DataFrame([{
@@ -28,7 +34,7 @@ def load_data():
         "name": product.name,
         "bar_code": product.bar_code,
         "description": product.description,
-        "supplier_id": product.supplier_id,
+        "supplier_id": supplier_dict_inv[product.supplier_id] if product.supplier_id else None,
         "stock": product.stock,
         "unit": product.unit,
         "price": product.price,
@@ -57,11 +63,13 @@ def save_data(row):
         st.rerun()
 
 with st.form("add_product", clear_on_submit=True):
-    name, bar_code, description, supplier, stock, unit, price, margin, add_button = st.columns(9)
+    name, bar_code, description, supplier = st.columns(4)
     name_input = name.text_input("Nome", key="name")
     bar_code_input = bar_code.text_input("Codigo de barras", key="bar_code")
     description_input = description.text_input("Descrição", key="description")
-    supplier_input = supplier.selectbox("Fornecedor", dbase.session.query(dbase.suppliers).all(), key="supplier_id")
+    supp = supplier.selectbox("Fornecedor", supplier_names, key="supplier_id")
+    supplier_input = supplier_dict[supp] if supp != "Fornecedores" else None
+    stock, unit, price, margin, add_button = st.columns(5)
     stock_input = stock.number_input("Em estoque", key="stock")
     unit_input = unit.text_input("Unidade", key="unit")
     price_input = price.number_input("Preço", key="price")
@@ -89,7 +97,7 @@ gb.configure_default_column(editable=True, filter=True, groupable=True)
 gb.configure_column("name", "Nome")
 gb.configure_column("bar_code", "Código de barras")
 gb.configure_column("description", "Descrição")
-gb.configure_column("supplier_id", "Fornecedor", cellDataType="number")
+gb.configure_column("supplier_id", "Fornecedor")
 gb.configure_column("stock", "Em estoque", cellDataType="number")
 gb.configure_column("unit", "Unidade")
 gb.configure_column("price", "Preço", cellDataType="number")

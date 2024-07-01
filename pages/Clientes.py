@@ -9,10 +9,10 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "3.1.1"
+version = "3.1.2"
 ASSETS_PATH = "assets"
 
-st.set_page_config(page_title="Home", layout="wide")
+st.set_page_config(page_title="Clientes", layout="wide")
 
 with open(os.path.join(ASSETS_PATH, "styles.css")) as css_file:
     st.markdown(f"<style>{css_file.read()}</style>", unsafe_allow_html=True)
