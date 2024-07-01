@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "2.3.0"
+version = "2.3.1"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Produtos", layout="wide")
@@ -78,7 +78,8 @@ with st.form("add_product", clear_on_submit=True):
     add_product = add_button.form_submit_button("Adicionar Produto", use_container_width=True)
     add_button.markdown("</div>", unsafe_allow_html=True)
 
-if add_product and name_input and bar_code_input and description_input and stock_input and unit_input and price_input and margin_input:
+if add_product and name_input and bar_code_input and description_input and supplier_input \
+    and stock_input and unit_input and price_input and margin_input:
     new_row = dbase.products()
     new_row.name = name_input
     new_row.bar_code = bar_code_input
