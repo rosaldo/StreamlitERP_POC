@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "2.4.0"
+version = "2.5.0"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Produtos", layout="wide")
@@ -23,9 +23,9 @@ st.write("# Produtos")
 
 all_suppliers = dbase.session.query(dbase.suppliers).all()
 supplier_names = [supplier.name for supplier in all_suppliers]
-supplier_names.insert(0, "Fornecedores")
-supplier_dict = {supplier.name: supplier.id for supplier in all_suppliers}
-supplier_dict_inv = {supplier.id: supplier.name for supplier in all_suppliers}
+supplier_id_dict = {supplier.id: supplier.name for supplier in all_suppliers}
+supplier_names.insert(0, "")
+supplier_name_dict = {supplier.name: supplier.id for supplier in all_suppliers}
 
 def load_data():
     products = dbase.session.query(dbase.products).all()
@@ -34,7 +34,7 @@ def load_data():
         "name": product.name,
         "bar_code": product.bar_code,
         "description": product.description,
-        "supplier_id": supplier_dict_inv[product.supplier_id] if product.supplier_id else None,
+        "supplier_id": supplier_id_dict[product.supplier_id] if product.supplier_id else None,
         "stock": product.stock,
         "unit": product.unit,
         "price": product.price,
@@ -52,7 +52,7 @@ def save_data(row):
         product.name = row.to_dict()["name"]
         product.bar_code = row.bar_code
         product.description = row.description
-        product.supplier_id = supplier_dict[row.supplier_id] if row.supplier_id else None
+        product.supplier_id = supplier_name_dict[row.supplier_id] if row.supplier_id else None
         product.stock = row.stock
         product.unit = row.unit
         product.price = row.price
@@ -69,7 +69,7 @@ with st.form("add_product", clear_on_submit=True):
     description_input = description.text_input("Descrição", key="description")
     
     supp = supplier.selectbox("Fornecedor", supplier_names, key="supplier_id")
-    supplier_input = supplier_dict[supp] if supp != "Fornecedores" else None
+    supplier_input = supplier_name_dict[supp] if supp != "" else None
     
     stock, unit, price, margin, add_button = st.columns(5)
     stock_input = stock.number_input("Em estoque", key="stock")
