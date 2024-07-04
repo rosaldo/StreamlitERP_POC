@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "2.3.1"
+version = "2.4.0"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Produtos", layout="wide")
@@ -52,7 +52,7 @@ def save_data(row):
         product.name = row.to_dict()["name"]
         product.bar_code = row.bar_code
         product.description = row.description
-        product.supplier_id = row.supplier_id
+        product.supplier_id = supplier_dict[row.supplier_id] if row.supplier_id else None
         product.stock = row.stock
         product.unit = row.unit
         product.price = row.price
@@ -67,8 +67,10 @@ with st.form("add_product", clear_on_submit=True):
     name_input = name.text_input("Nome", key="name")
     bar_code_input = bar_code.text_input("Codigo de barras", key="bar_code")
     description_input = description.text_input("Descrição", key="description")
+    
     supp = supplier.selectbox("Fornecedor", supplier_names, key="supplier_id")
     supplier_input = supplier_dict[supp] if supp != "Fornecedores" else None
+    
     stock, unit, price, margin, add_button = st.columns(5)
     stock_input = stock.number_input("Em estoque", key="stock")
     unit_input = unit.text_input("Unidade", key="unit")
@@ -98,7 +100,7 @@ gb.configure_default_column(editable=True, filter=True, groupable=True)
 gb.configure_column("name", "Nome")
 gb.configure_column("bar_code", "Código de barras")
 gb.configure_column("description", "Descrição")
-gb.configure_column("supplier_id", "Fornecedor")
+gb.configure_column("supplier_id", "Fornecedor", cellEditor="agRichSelectCellEditor", cellEditorParams={"values": supplier_names[1:]})
 gb.configure_column("stock", "Em estoque", cellDataType="number")
 gb.configure_column("unit", "Unidade")
 gb.configure_column("price", "Preço", cellDataType="number")
