@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "2.6.0"
+version = "2.6.1"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Produtos", layout="wide")
@@ -49,8 +49,8 @@ df_products = load_data()
 def save_data(row):
     product = dbase.session.query(dbase.products).filter(dbase.products.id == int(row.id)).first()
     if product:
-        product.bar_code = row.bar_code
         product.name = row.to_dict()["name"]
+        product.bar_code = row.bar_code
         product.description = row.description
         product.supplier_id = supplier_name_dict[row.supplier_id] if row.supplier_id else None
         product.stock = row.stock
@@ -63,7 +63,7 @@ def save_data(row):
         st.rerun()
 
 with st.form("add_product", clear_on_submit=True):
-    name, bar_code, description, supplier = st.columns(4)
+    bar_code, name, description, supplier = st.columns(4)
     bar_code_input = bar_code.text_input("Codigo de barras", key="bar_code")
     name_input = name.text_input("Nome", key="name")
     description_input = description.text_input("Descrição", key="description")
