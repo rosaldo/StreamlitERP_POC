@@ -9,7 +9,7 @@ from st_aggrid import (AgGrid, DataReturnMode, GridOptionsBuilder,
 from aggrid_locale import locale_text
 from database import dbase
 
-version = "2.5.0"
+version = "2.6.0"
 ASSETS_PATH = "assets"
 
 st.set_page_config(page_title="Produtos", layout="wide")
@@ -31,8 +31,8 @@ def load_data():
     products = dbase.session.query(dbase.products).all()
     return pd.DataFrame([{
         "id": product.id,
-        "name": product.name,
         "bar_code": product.bar_code,
+        "name": product.name,
         "description": product.description,
         "supplier_id": supplier_id_dict[product.supplier_id] if product.supplier_id else None,
         "stock": product.stock,
@@ -49,8 +49,8 @@ df_products = load_data()
 def save_data(row):
     product = dbase.session.query(dbase.products).filter(dbase.products.id == int(row.id)).first()
     if product:
-        product.name = row.to_dict()["name"]
         product.bar_code = row.bar_code
+        product.name = row.to_dict()["name"]
         product.description = row.description
         product.supplier_id = supplier_name_dict[row.supplier_id] if row.supplier_id else None
         product.stock = row.stock
@@ -64,13 +64,11 @@ def save_data(row):
 
 with st.form("add_product", clear_on_submit=True):
     name, bar_code, description, supplier = st.columns(4)
-    name_input = name.text_input("Nome", key="name")
     bar_code_input = bar_code.text_input("Codigo de barras", key="bar_code")
+    name_input = name.text_input("Nome", key="name")
     description_input = description.text_input("Descrição", key="description")
-    
     supp = supplier.selectbox("Fornecedor", supplier_names, key="supplier_id")
     supplier_input = supplier_name_dict[supp] if supp != "" else None
-    
     stock, unit, price, margin, add_button = st.columns(5)
     stock_input = stock.number_input("Em estoque", key="stock")
     unit_input = unit.text_input("Unidade", key="unit")
@@ -83,8 +81,8 @@ with st.form("add_product", clear_on_submit=True):
 if add_product and name_input and bar_code_input and description_input and supplier_input \
     and stock_input and unit_input and price_input and margin_input:
     new_row = dbase.products()
-    new_row.name = name_input
     new_row.bar_code = bar_code_input
+    new_row.name = name_input
     new_row.description = description_input
     new_row.supplier_id = supplier_input
     new_row.stock = stock_input
@@ -97,8 +95,8 @@ if add_product and name_input and bar_code_input and description_input and suppl
 
 gb = GridOptionsBuilder.from_dataframe(df_products[[col for col in df_products.columns if col.lower() != "id"]])
 gb.configure_default_column(editable=True, filter=True, groupable=True)
-gb.configure_column("name", "Nome")
 gb.configure_column("bar_code", "Código de barras")
+gb.configure_column("name", "Nome")
 gb.configure_column("description", "Descrição")
 gb.configure_column("supplier_id", "Fornecedor", cellEditor="agRichSelectCellEditor", cellEditorParams={"values": supplier_names[1:]})
 gb.configure_column("stock", "Em estoque", cellDataType="number")
