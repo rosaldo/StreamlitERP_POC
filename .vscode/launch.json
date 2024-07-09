@@ -1,9 +1,9 @@
 {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "configurations": [
         {
             "name": "Python: Streamlit",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "streamlit",
             "args": ["run", "${file}"],
