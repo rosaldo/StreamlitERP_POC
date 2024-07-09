@@ -14,3 +14,11 @@ pip install -r ./requirements.txt
 ```
 streamlit run ./Home.py
 ```
+
+## How to running in Docker
+```
+git clone https://github.com/rosaldo/StreamlitERP_POC.git
+cd StreamlitERP_POC
+docker build -t StreamlitERP_POC .
+docker run -p 8501:8501 StreamlitERP_POC
+```
