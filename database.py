@@ -1,6 +1,8 @@
 import os
+import random
 
 from datetime import datetime as dtt
+from faker import Faker
 from sqlalchemy import (Boolean, Column, DateTime, Double, ForeignKey, Integer,
                         String, create_engine)
 from sqlalchemy.engine import reflection
@@ -91,7 +93,7 @@ class ProductsSales(Base):
         return f"ProductsSales(id={self.id}, sale={self.sale}, product={self.product}, quantity={self.quantity}, created_at={self.created_at}, updated_at={self.updated_at})"
 
 class Database:
-    version = "1.0.0"
+    version = "2.0.0"
     suppliers = Suppliers
     products = Products
     costumers = Costumers
@@ -106,15 +108,72 @@ class Database:
         session = sessionmaker(bind=self.engine)
         self.session = session()
         inspector = reflection.Inspector.from_engine(self.engine)
+        fake = Faker()
         if Suppliers.__tablename__ not in inspector.get_table_names():
             Suppliers.__table__.create(self.engine)
+            for _ in range(50):
+                self.session.add(self.suppliers(
+                    name=fake.name(),
+                    email=fake.email(),
+                    address=fake.address(),
+                    phone=fake.phone_number(),
+                    active=True,
+                    created_at=fake.date_time(),
+                    updated_at=fake.date_time()
+                ))
+            self.session.commit()
         if Products.__tablename__ not in inspector.get_table_names():
             Products.__table__.create(self.engine)
+            for _ in range(50):
+                self.session.add(self.products(
+                    name=fake.name(),
+                    bar_code=fake.ean8(),
+                    description=fake.text(),
+                    supplier_id=random.randint(0, 49),
+                    stock=random.randint(10, 10),
+                    unit=fake.word(),
+                    price=random.randint(500, 5000)/100,
+                    margin=random.randint(0, 400)/100,
+                    active=True,
+                    created_at=fake.date_time(),
+                    updated_at=fake.date_time()
+                ))
+            self.session.commit()
         if Costumers.__tablename__ not in inspector.get_table_names():
             Costumers.__table__.create(self.engine)
+            for _ in range(200):
+                self.session.add(self.costumers(
+                    name=fake.name(),
+                    email=fake.email(),
+                    address=fake.address(),
+                    phone=fake.phone_number(),
+                    active=True,
+                    created_at=fake.date_time(),
+                    updated_at=fake.date_time()
+                ))
+            self.session.commit()
         if Sales.__tablename__ not in inspector.get_table_names():
             Sales.__table__.create(self.engine)
+            for _ in range(100):
+                self.session.add(self.sales(
+                    costumer_id=random.randint(0, 199),
+                    price=fake.random_number(),
+                    active=True,
+                    created_at=fake.date_time(),
+                    updated_at=fake.date_time()
+                ))
+            self.session.commit()
         if ProductsSales.__tablename__ not in inspector.get_table_names():
             ProductsSales.__table__.create(self.engine)
+            for _ in range(500):
+                self.session.add(self.products_sales(
+                    sale_id=random.randint(0, 99),
+                    product_id=random.randint(0, 49),
+                    quantity=random.randint(10, 10),
+                    active=True,
+                    created_at=fake.date_time(),
+                    updated_at=fake.date_time()
+                ))
+            self.session.commit()
 
 dbase = Database()

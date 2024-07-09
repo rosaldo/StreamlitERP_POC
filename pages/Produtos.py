@@ -23,8 +23,8 @@ st.write("# Produtos")
 
 all_suppliers = dbase.session.query(dbase.suppliers).all()
 supplier_names = [supplier.name for supplier in all_suppliers]
-supplier_id_dict = {supplier.id: supplier.name for supplier in all_suppliers}
 supplier_names.insert(0, "")
+supplier_id_dict = {supplier.id: supplier.name for supplier in all_suppliers}
 supplier_name_dict = {supplier.name: supplier.id for supplier in all_suppliers}
 
 def load_data():
