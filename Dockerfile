@@ -12,4 +12,6 @@ RUN python3.12 -m venv venv
 
 EXPOSE 8501
 
-RUN source venv/bin/activate && pip install pip --upgrade && pip install -r requirements.txt && streamlit run Home.py
+RUN source venv/bin/activate && pip install pip --upgrade && pip install -r requirements.txt
+
+CMD ["venv/bin/streamlit", "run", "Home.py"]
