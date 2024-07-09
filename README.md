@@ -12,5 +12,5 @@ pip install -r ./requirements.txt
 
 ## How to running in Linux
 ```
-streamlit run ./home.py
+streamlit run ./Home.py
 ```
